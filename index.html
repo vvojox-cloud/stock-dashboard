@@ -203,7 +203,6 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
 
 <main>
 
-  <!-- TABS -->
   <div class="tabs">
     <button class="tab active" onclick="switchTab('stocks')">📈 持倉</button>
     <button class="tab" onclick="switchTab('ai')">🤖 AI</button>
@@ -211,14 +210,12 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
     <button class="tab" onclick="switchTab('info')">ℹ️ 說明</button>
   </div>
 
-  <!-- ── 持倉頁 ── -->
   <div class="page active" id="page-stocks">
 
     <div class="banner warn" id="banner">
       <span id="banner-text">⏳ 正在偵測行情來源…</span>
     </div>
 
-    <!-- INPUT -->
     <div class="add-row">
       <input id="ticker-input" type="text" placeholder="AAPL, TSM, BTC-USD…" />
       <button class="btn btn-p" onclick="addFromInput()">＋</button>
@@ -231,7 +228,6 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
       <div class="preset" onclick="addPreset(['BTC-USD','ETH-USD'])">₿ 加密</div>
     </div>
 
-    <!-- SUMMARY -->
     <div class="sum-grid" style="margin-bottom:12px">
       <div class="scard2">
         <div class="slabel">持倉 / 漲跌</div>
@@ -245,12 +241,10 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
       </div>
     </div>
 
-    <!-- STOCK LIST -->
     <div class="stock-list" id="stock-list">
       <div class="empty"><div class="ico">📊</div>點選上方快速標籤加入股票</div>
     </div>
 
-    <!-- TECH STATS -->
     <div class="panel" id="stats-panel" style="display:none">
       <div class="ph"><div class="pt">技術指標</div></div>
       <div class="pb" id="stats-body"></div>
@@ -258,30 +252,47 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
 
   </div>
 
-  <!-- ── AI 頁 ── -->
   <div class="page" id="page-ai">
     <div class="panel" style="margin-bottom:0">
       <div class="ph">
         <div class="pt">🤖 AI 投資助理</div>
         <span onclick="showApiKeyModal()" style="font-size:.68rem;color:var(--muted);font-family:'Space Mono',monospace;cursor:pointer;padding:3px 8px;border:1px solid var(--border);border-radius:6px;" id="api-key-status">⚙️ 設定 Key</span>
       </div>
-      <!-- API Key 輸入 Modal -->
+      
       <div id="api-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:200;align-items:center;justify-content:center;">
         <div style="background:var(--panel);border:1px solid var(--accent);border-radius:14px;padding:24px;margin:16px;max-width:420px;width:100%">
-          <div style="font-family:'Space Mono',monospace;font-size:.85rem;color:var(--accent);margin-bottom:8px;letter-spacing:1px">⚙️ ANTHROPIC API KEY</div>
-          <div style="font-size:.72rem;color:var(--muted);margin-bottom:16px;line-height:1.6">
-            前往 <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--accent)">console.anthropic.com</a> 取得免費 API Key，儲存在本機瀏覽器，不會上傳任何地方。
+          <div style="font-family:'Space Mono',monospace;font-size:.85rem;color:var(--accent);margin-bottom:16px;letter-spacing:1px">⚙️ AI 投資助理設定</div>
+          
+          <div style="margin-bottom:12px">
+            <label style="font-size:.72rem;color:var(--muted);display:block;margin-bottom:6px;">預設使用的 AI 模型</label>
+            <select id="ai-model-select" style="width:100%;background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:.78rem;outline:none;">
+              <option value="anthropic">Claude (Anthropic)</option>
+              <option value="gemini">Gemini (Google)</option>
+            </select>
           </div>
-          <input id="api-key-input" type="password" placeholder="sk-ant-api03-..." 
-            style="width:100%;background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:10px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:.78rem;outline:none;margin-bottom:12px;"
-            onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+
+          <div style="margin-bottom:12px">
+            <label style="font-size:.72rem;color:var(--muted);display:block;margin-bottom:6px;">Anthropic API Key</label>
+            <input id="anthropic-key-input" type="password" placeholder="sk-ant-..." 
+              style="width:100%;background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:.78rem;outline:none;"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+
+          <div style="margin-bottom:20px">
+            <label style="font-size:.72rem;color:var(--muted);display:block;margin-bottom:6px;">Gemini API Key</label>
+            <input id="gemini-key-input" type="password" placeholder="AIzaSy..." 
+              style="width:100%;background:rgba(0,212,255,.05);border:1px solid var(--border);border-radius:8px;padding:9px 12px;color:var(--text);font-family:'Space Mono',monospace;font-size:.78rem;outline:none;"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor='var(--border)'"/>
+          </div>
+
           <div style="display:flex;gap:8px;">
-            <button onclick="saveApiKey()" style="flex:1;padding:10px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;cursor:pointer;">✓ 儲存</button>
-            <button onclick="clearApiKey()" style="padding:10px 14px;background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;cursor:pointer;">刪除</button>
+            <button onclick="saveApiSettings()" style="flex:1;padding:10px;background:var(--accent);color:var(--bg);border:none;border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;font-weight:700;cursor:pointer;">✓ 儲存</button>
+            <button onclick="clearApiSettings()" style="padding:10px 14px;background:transparent;border:1px solid var(--red);color:var(--red);border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;cursor:pointer;">清除</button>
             <button onclick="closeApiModal()" style="padding:10px 14px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:8px;font-family:'Space Mono',monospace;font-size:.78rem;cursor:pointer;">✕</button>
           </div>
         </div>
       </div>
+      
       <div class="qprompts">
         <div class="qp" onclick="quickAsk('幫我分析目前持倉')">整體分析</div>
         <div class="qp" onclick="quickAsk('哪檔最值得加倉？')">加倉建議</div>
@@ -302,7 +313,6 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
     </div>
   </div>
 
-  <!-- ── 新聞頁 ── -->
   <div class="page" id="page-news">
     <div class="panel" style="margin-bottom:0">
       <div class="ph">
@@ -315,7 +325,6 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
     </div>
   </div>
 
-  <!-- ── 說明頁 ── -->
   <div class="page" id="page-info">
     <div class="guide">
       <h3>📱 手機使用說明</h3>
@@ -337,9 +346,9 @@ canvas.spark{width:100%;height:28px;display:block;margin-top:8px}
     <div class="guide" style="margin-top:12px">
       <h3>📊 功能說明</h3>
       <div class="step"><div class="stepn">①</div><div class="stept"><b>持倉頁</b> — 即時股價、RSI、MACD、30日走勢圖</div></div>
-      <div class="step"><div class="stepn">②</div><div class="stept"><b>AI 頁</b> — Claude 帶入你的持倉數據做投資分析</div></div>
+      <div class="step"><div class="stepn">②</div><div class="stept"><b>AI 頁</b> — Claude 或 Gemini 帶入你的持倉數據做投資分析</div></div>
       <div class="step"><div class="stepn">③</div><div class="stept"><b>新聞頁</b> — Yahoo Finance RSS 自動分情緒</div></div>
-      <div class="step"><div class="stepn">④</div><div class="stept">每 5 分鐘自動刷新，股票清單存在瀏覽器本地</div></div>
+      <div class="step"><div class="stepn">④</div><div class="stept">每 5 分鐘自動刷新，股票清單與金鑰設定存在瀏覽器本地</div></div>
     </div>
   </div>
 
@@ -848,52 +857,65 @@ function buildCtx() {
 function quickAsk(q) { document.getElementById('ai-q').value=q; askAI(); }
 
 // ─── API KEY MANAGEMENT ──────────────────────────────────
-const API_KEY_SK = 'investai_apikey';
+const API_SETTINGS_SK = 'investai_api_settings';
 
-function getApiKey() { return localStorage.getItem(API_KEY_SK) || ''; }
+// 取得當前設定，若無則回傳預設結構
+function getApiSettings() {
+  try {
+    return JSON.parse(localStorage.getItem(API_SETTINGS_SK)) || { model: 'anthropic', anthropic: '', gemini: '' };
+  } catch {
+    return { model: 'anthropic', anthropic: '', gemini: '' };
+  }
+}
 
 function updateKeyStatus() {
   const btn = document.getElementById('api-key-status');
   if (!btn) return;
-  const key = getApiKey();
-  btn.textContent = key ? '🔑 Key 已設定' : '⚙️ 設定 Key';
-  btn.style.color = key ? 'var(--green)' : 'var(--muted)';
-  btn.style.borderColor = key ? 'var(--green)' : 'var(--border)';
+  const settings = getApiSettings();
+  const hasKey = settings.model === 'anthropic' ? !!settings.anthropic : !!settings.gemini;
+  const modelName = settings.model === 'anthropic' ? 'Claude' : 'Gemini';
+  
+  btn.textContent = hasKey ? `🔑 ${modelName} 準備就緒` : '⚙️ 設定 Key';
+  btn.style.color = hasKey ? 'var(--green)' : 'var(--muted)';
+  btn.style.borderColor = hasKey ? 'var(--green)' : 'var(--border)';
 }
 
 function showApiKeyModal() {
   const modal = document.getElementById('api-modal');
-  const input = document.getElementById('api-key-input');
-  input.value = getApiKey();
+  const settings = getApiSettings();
+  
+  document.getElementById('ai-model-select').value = settings.model || 'anthropic';
+  document.getElementById('anthropic-key-input').value = settings.anthropic || '';
+  document.getElementById('gemini-key-input').value = settings.gemini || '';
+  
   modal.style.display = 'flex';
-  setTimeout(() => input.focus(), 100);
 }
 
 function closeApiModal() {
   document.getElementById('api-modal').style.display = 'none';
 }
 
-function saveApiKey() {
-  const key = document.getElementById('api-key-input').value.trim();
-  if (!key.startsWith('sk-ant-')) {
-    document.getElementById('api-key-input').style.borderColor = 'var(--red)';
-    return;
-  }
-  localStorage.setItem(API_KEY_SK, key);
+function saveApiSettings() {
+  const model = document.getElementById('ai-model-select').value;
+  const anthropic = document.getElementById('anthropic-key-input').value.trim();
+  const gemini = document.getElementById('gemini-key-input').value.trim();
+
+  localStorage.setItem(API_SETTINGS_SK, JSON.stringify({ model, anthropic, gemini }));
   closeApiModal();
   updateKeyStatus();
-  showToast('✅ API Key 已儲存');
+  showToast('✅ AI 設定已儲存');
 }
 
-function clearApiKey() {
-  localStorage.removeItem(API_KEY_SK);
-  document.getElementById('api-key-input').value = '';
+function clearApiSettings() {
+  localStorage.removeItem(API_SETTINGS_SK);
+  document.getElementById('anthropic-key-input').value = '';
+  document.getElementById('gemini-key-input').value = '';
   closeApiModal();
   updateKeyStatus();
-  showToast('🗑️ API Key 已刪除');
+  showToast('🗑️ AI 設定已清除');
 }
 
-// Close modal on backdrop click
+// 點擊背景關閉 Modal
 document.addEventListener('click', e => {
   const modal = document.getElementById('api-modal');
   if (e.target === modal) closeApiModal();
@@ -903,47 +925,69 @@ async function askAI() {
   const inp = document.getElementById('ai-q');
   const q = inp.value.trim(); if (!q) return;
 
-  const apiKey = getApiKey();
+  const settings = getApiSettings();
+  const activeModel = settings.model;
+  const apiKey = activeModel === 'anthropic' ? settings.anthropic : settings.gemini;
+
   if (!apiKey) {
-    addMsg('ai', '⚠️ 請先點右上角「⚙️ 設定 Key」輸入你的 Anthropic API Key，才能使用 AI 功能。<br><br>→ 前往 <a href="https://console.anthropic.com/settings/keys" target="_blank" style="color:var(--accent)">console.anthropic.com</a> 免費取得');
+    addMsg('ai', `⚠️ 請先點右上角「⚙️ 設定 Key」輸入你的 ${activeModel === 'anthropic' ? 'Anthropic' : 'Gemini'} API Key。`);
     return;
   }
 
   addMsg('user', q); inp.value='';
   const tid = addTyping();
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:1000,
-        system:`你是一位專業的股票投資分析師，用繁體中文回答，語氣專業親切，回答具體有見地，並適當提醒投資風險。
+  
+  const systemPrompt = `你是一位專業的股票投資分析師，用繁體中文回答，語氣專業親切，回答具體有見地，並適當提醒投資風險。\n\n持倉資料（${new Date().toLocaleDateString('zh-TW')}）：\n${buildCtx()}\n\n⚠️ 所有建議僅供參考。`;
 
-持倉資料（${new Date().toLocaleDateString('zh-TW')}）：\n${buildCtx()}\n\n⚠️ 所有建議僅供參考。`,
-        messages:[{role:'user',content:q}]
-      })
-    });
-    const data = await res.json();
-    removeTyping(tid);
-    if (data.error) {
-      const errMsg = data.error.message || '';
-      if (errMsg.includes('invalid_api_key') || errMsg.includes('authentication')) {
-        addMsg('ai', '⚠️ API Key 無效，請重新設定。');
-        showApiKeyModal();
-      } else {
-        addMsg('ai', `⚠️ API 錯誤：${errMsg}`);
-      }
-    } else {
-      addMsg('ai', data.content?.[0]?.text || '抱歉，無法取得回應。');
+  try {
+    let replyText = '';
+
+    if (activeModel === 'anthropic') {
+      // --- Anthropic (Claude) API 呼叫 ---
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-access': 'true'
+        },
+        body: JSON.stringify({
+          model: 'claude-3-5-sonnet-20241022', // 更新為最新的 Sonnet 模型代號
+          max_tokens: 1000,
+          system: systemPrompt,
+          messages: [{role: 'user', content: q}]
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'Anthropic 連線錯誤');
+      replyText = data.content?.[0]?.text;
+
+    } else if (activeModel === 'gemini') {
+      // --- Google (Gemini) API 呼叫 ---
+      const geminiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=${apiKey}`;
+      const res = await fetch(geminiUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          system_instruction: { parts: { text: systemPrompt } },
+          contents: [{ role: 'user', parts: [{ text: q }] }],
+          generationConfig: { maxOutputTokens: 1000 }
+        })
+      });
+      const data = await res.json();
+      if (data.error) throw new Error(data.error.message || 'Gemini 連線錯誤');
+      replyText = data.candidates?.[0]?.content?.parts?.[0]?.text;
     }
+
+    removeTyping(tid);
+    addMsg('ai', replyText || '抱歉，無法取得回應。');
+
   } catch(e) {
     removeTyping(tid);
-    addMsg('ai',`⚠️ 連線失敗：${e.message}。請確認網路或 API Key 是否正確。`);
+    let errMsg = e.message;
+    if (errMsg.includes('API_KEY_INVALID')) errMsg = 'API Key 無效，請重新檢查設定。';
+    addMsg('ai', `⚠️ 處理失敗：${errMsg}`);
   }
 }
 
